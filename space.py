@@ -3,13 +3,18 @@ from random import randint
  
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 1000
+GRAVITY_CONSTANT = 0.3
+
 class AlienWindow(arcade.Window):
+    ALIEN_POSITION_X = 400
+    ALIEN_POSITION_Y = 850
     def __init__(self,width,height):
         super().__init__(width, height)
         self.background = None
         self.alien = arcade.Sprite('images/alien1.png')
-        self.alien.set_position(400, 125)
-        
+        #self.alien.set_position(400, 125) #alien position
+        self.alien.set_position(ALIEN_POSITION_X,ALIEN_POSITION_Y)
+                
     def setup(self):
         self.background = arcade.load_texture("images/space2.jpg")
     
@@ -17,6 +22,11 @@ class AlienWindow(arcade.Window):
         arcade.start_render()
         arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
         self.alien.draw()
+        ALIEN_POSITION_Y -= 1 
+        self.alien.set_position(ALIEN_POSITION_X,ALIEN_POSITION_Y)
+        print(ALIEN_POSITION_Y)
+        
+    
 def main():
     window = AlienWindow(SCREEN_WIDTH, SCREEN_HEIGHT)
     window.setup()
