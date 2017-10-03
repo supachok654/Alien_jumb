@@ -4,7 +4,7 @@ from random import randint
  
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 1000
-GRAVITY_CONSTANT = 0.3
+GRAVITY_CONSTANT = 750
 
 class AlienWindow(arcade.Window):
     def __init__(self,width,height):
@@ -26,7 +26,8 @@ class AlienWindow(arcade.Window):
     def update(self,delta):
         self.world.update(delta)
         self.alien_sprite.set_position(self.world.alien.x,self.world.alien.y)
-    
+        self.world.alien.y -= GRAVITY_CONSTANT*delta
+        print(self.world.alien.y)
 def main():
     window = AlienWindow(SCREEN_WIDTH, SCREEN_HEIGHT)
     window.setup()
