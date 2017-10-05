@@ -20,6 +20,10 @@ class Base:
         self.x = x
         self.y = y
     def update(self,delta):
+        if self.y > self.world.height:
+            self.y = 0
+        if self.y < 0:
+            self.y = 1000
         if self.x > self.world.width:
             self.x = 0
         if self.x < 0:

@@ -9,6 +9,9 @@ GRAVITY_CONSTANT = 750 #เดี๋ยวมาแก้ ความโน้�
                        #โดยสร้างตัวแปรเวลามาเก็บ
                        #แล้วมาคูนกับ gravity
 MOVEMENT_CONSTANT = 5
+BASE_CONSTANT_Y = 500
+BASE_CONSTANT_X = 500
+BOUNCINESS = 5
 
 class AlienWindow(arcade.Window):
     def __init__(self,width,height):
@@ -43,10 +46,14 @@ class AlienWindow(arcade.Window):
         self.base_sprite.set_position(self.world.base.x,self.world.base.y)  
         self.world.alien.y -= self.delta_y*delta
         self.world.alien.x += self.delta_x
+        self.world.base.y -= BASE_CONSTANT_Y*delta
+        #self.world.base.x -= BASE_CONSTANT_X*delta
+        print(self.world.alien.y)
         #print(self.alien_sprite.center_y)
         #print(self.world.base.y)
         if(self.alien_sprite.center_y >= self.world.base.y-10.5 and self.alien_sprite.center_y <= self.world.base.y+50.5  and self.alien_sprite.center_x <= self.world.base.x+65 and self.alien_sprite.center_x >= self.world.base.x-65):
-            self.delta_y = 0
+                self.delta_y *= -BOUNCINESS
+                
         else:
             self.delta_y = GRAVITY_CONSTANT
         
