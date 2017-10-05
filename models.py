@@ -1,12 +1,12 @@
 import arcade
-
+GRAVITY_CONSTANT = 750
 class Alien:
     def __init__(self,world,x,y):
         self.world = world
         self.x = x
         self.y = y
         self.delta_x = 0
-        self.delta_y = 0
+        self.delta_y = GRAVITY_CONSTANT
     def update(self,delta):
         if self.x > self.world.width:
             self.x = 0
