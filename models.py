@@ -49,7 +49,7 @@ class World:
         #self.base = Base(self,randint(100,700),randint(200,1000))
         self.base_list = arcade.SpriteList()
         for x in range(NUM_BASE):
-            self.base_list.append(Base(self, randint(100,700),randint(200,1000)))
+            self.base_list.append(Base(self, randint(100,700),200*(x+1)))
         
     def update(self,delta):
         self.alien.update(delta)
