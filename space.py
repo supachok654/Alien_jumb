@@ -25,6 +25,7 @@ class AlienWindow(arcade.Window):
         #self.delta_y = alien.delta_y
         self.delta_x = alien.change_x
         self.delta_y = alien.chnage_y
+        self.is_on_jump = False
 
         #self.alien.set_position(400, 125) #alien position
         
@@ -56,12 +57,24 @@ class AlienWindow(arcade.Window):
         #print(self.alien_sprite.center_y)
         #print(self.world.base.y)
         self.world.alien.change_x = self.delta_x
-        self.world.alien.change_y = -2
+        #is_on_base = False
+        
         for base in self.world.base_list:
             if(self.world.alien.center_y >= base.center_y - 10.5 and self.world.alien.center_y <= base.center_y + 50.5 \
                and self.world.alien.center_x <= base.center_x + 65 and self.world.alien.center_x >= base.center_x - 65):
                 #self.delta_y *= -BOUNCINESS #แก้
-                self.world.alien.change_y = 0
+                #is_on_base = True
+                self.is_on_jump = True
+                self.world.alien.change_y = 20
+                #self.world.alien.change_y = 5
+                break
+        
+        if self.is_on_jump:
+            self.world.alien.change_y -= 0.75
+            if self.world.alien.change_y < -200: 
+                self.is_on_jump = False
+        else:
+            self.world.alien.change_y = -10
 
         '''
         if(self.alien_sprite.center_y >= self.world.base.y-10.5 and self.alien_sprite.center_y <= self.world.base.y+50.5  and self.alien_sprite.center_x <= self.world.base.x+65 and self.alien_sprite.center_x >= self.world.base.x-65):
