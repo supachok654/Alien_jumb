@@ -5,12 +5,12 @@ from random import randint
  
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 1000
-GRAVITY_CONSTANT = 750 #เดี๋ยวมาแก้ ความโน้มถ่วงให้เพิ่มตามเวลาที่เปลี่ยนไป 
+#GRAVITY_CONSTANT = 750 #เดี๋ยวมาแก้ ความโน้มถ่วงให้เพิ่มตามเวลาที่เปลี่ยนไป 
                        #โดยสร้างตัวแปรเวลามาเก็บ
                        #แล้วมาคูนกับ gravity
-MOVEMENT_CONSTANT = 5
-BASE_CONSTANT_Y = 500
-BASE_CONSTANT_X = 500
+MOVEMENT_CONSTANT = 7
+#BASE_CONSTANT_Y = 500
+#BASE_CONSTANT_X = 500
 BOUNCINESS = 5
 class AlienWindow(arcade.Window):
     def __init__(self,width,height):
