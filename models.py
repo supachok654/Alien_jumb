@@ -2,6 +2,7 @@ import arcade
 from random import randint
 GRAVITY_CONSTANT = 750
 NUM_BASE = 5
+BASE_MOVEMENT_CONSTANT = -7
 
 class Alien(arcade.Sprite):
     def __init__(self,world,x,y):
@@ -27,7 +28,7 @@ class Base(arcade.Sprite):
         self.world = world
         self.center_x = x
         self.center_y = y
-        self.change_y = -1
+        self.change_y = BASE_MOVEMENT_CONSTANT
 
     def update(self,delta):
         super().update()
