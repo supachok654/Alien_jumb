@@ -11,14 +11,17 @@ SCREEN_HEIGHT = 1000
 MOVEMENT_CONSTANT = 7
 #BASE_CONSTANT_Y = 500
 #BASE_CONSTANT_X = 500
-BOUNCINESS = 5
+#BOUNCINESS = 5
+JUMP_CONSTANT = 20
+FALL_CONSTANT = -10
+CHANGE_Y_CONSTANT = 0.75
 class AlienWindow(arcade.Window):
     def __init__(self,width,height):
-        super().__init__(width, height)
+        super().__init__(width, height,"Alien Jump")
         self.background = None
         self.base_list = None 
         self.world = World(width,height) 
-        #self.alien_sprite = arcade.Sprite('images/alien1.png')
+        #self.alien_sprite = arcade.Spcd rite('images/alien1.png')
         #self.base_sprite = arcade.Sprite('images/base_3.png')
         alien = Alien(self.world,SCREEN_WIDTH,SCREEN_HEIGHT)
         #self.delta_x = alien.delta_x
@@ -53,28 +56,28 @@ class AlienWindow(arcade.Window):
         #self.world.alien.x += self.delta_x
         #self.world.base.y -= BASE_CONSTANT_Y*delta
         #self.world.base.x -= BASE_CONSTANT_X*delta #ถามเพื่อนว่าควรมีตรงนี้มั้ย
-        print(self.world.alien.center_y)
+        #print(self.world.alien.center_y)
         #print(self.alien_sprite.center_y)
         #print(self.world.base.y)
         self.world.alien.change_x = self.delta_x
         #is_on_base = False
         
         for base in self.world.base_list:
-            if(self.world.alien.center_y >= base.center_y - 10.5 and self.world.alien.center_y <= base.center_y + 50.5 \
-               and self.world.alien.center_x <= base.center_x + 65 and self.world.alien.center_x >= base.center_x - 65):
+            if self.world.alien.center_y >= base.center_y - 10.5 and self.world.alien.center_y <= base.center_y + 50.5 \
+            and self.world.alien.center_x <= base.center_x + 65 and self.world.alien.center_x >= base.center_x - 65:
                 #self.delta_y *= -BOUNCINESS #แก้
                 #is_on_base = True
                 self.is_on_jump = True
-                self.world.alien.change_y = 20
+                self.world.alien.change_y = JUMP_CONSTANT
                 #self.world.alien.change_y = 5
                 break
         
         if self.is_on_jump:
-            self.world.alien.change_y -= 0.75
+            self.world.alien.change_y -= CHANGE_Y_CONSTANT
             if self.world.alien.change_y < -200: 
                 self.is_on_jump = False
         else:
-            self.world.alien.change_y = -10
+            self.world.alien.change_y = FALL_CONSTANT
 
         '''
         if(self.alien_sprite.center_y >= self.world.base.y-10.5 and self.alien_sprite.center_y <= self.world.base.y+50.5  and self.alien_sprite.center_x <= self.world.base.x+65 and self.alien_sprite.center_x >= self.world.base.x-65):
