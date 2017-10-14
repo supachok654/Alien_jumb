@@ -31,6 +31,7 @@ class AlienWindow(arcade.Window):
         self.delta_x = alien.change_x
         self.delta_y = alien.chnage_y
         self.is_on_jump = False
+        self.checkyellowstar = True
 
         #self.alien.set_position(400, 125) #alien position
         
@@ -78,6 +79,16 @@ class AlienWindow(arcade.Window):
                 self.world.alien.change_y = JUMP_CONSTANT
                 #self.world.alien.change_y = 5
                 break
+        for yellowstar in self.world.yellowstar_list:
+            if arcade.check_for_collision(self.world.alien,yellowstar):
+                self.checkyellowstar = True
+                yellowstar.kill()
+                self.world.checkstar = 0
+        for blackstar in self.world.blackstar_list:
+            if arcade.check_for_collision(self.world.alien,blackstar):
+                self.checkyellowstar = False
+                blackstar.kill()
+                self.world.checkstar = 0
         
         if self.is_on_jump:
             self.world.alien.change_y -= CHANGE_Y_CONSTANT
@@ -97,10 +108,15 @@ class AlienWindow(arcade.Window):
         
 
     def on_key_press(self,key,modifiers):
-        if(key == arcade.key.LEFT):
+        if(key == arcade.key.LEFT and self.checkyellowstar == True):
             self.delta_x = -MOVEMENT_CONSTANT
-        if(key == arcade.key.RIGHT):
+        elif(key == arcade.key.RIGHT and self.checkyellowstar == True):
             self.delta_x = MOVEMENT_CONSTANT
+        elif(key == arcade.key.LEFT and self.checkyellowstar == False):
+            self.delta_x = MOVEMENT_CONSTANT
+        elif(key == arcade.key.RIGHT and self.checkyellowstar == False):
+            self.delta_x = -MOVEMENT_CONSTANT
+        
     def on_key_release(self,key,modifiers):
         if(key == arcade.key.LEFT or key == arcade.key.RIGHT):
            self.delta_x = 0
