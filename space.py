@@ -1,6 +1,6 @@
 import arcade
 import arcade.key
-from models import World,Alien,Base,YellowStar
+from models import World,Alien,Base,YellowStar,BlackStar
 from random import randint
  
 SCREEN_WIDTH = 800
@@ -21,6 +21,7 @@ class AlienWindow(arcade.Window):
         self.background = None
         self.base_list = None
         self.yellowstar_list = None 
+        self.blackstar_list = None
         self.world = World(width,height) 
         #self.alien_sprite = arcade.Spcd rite('images/alien1.png')
         #self.base_sprite = arcade.Sprite('images/base_3.png')
@@ -38,6 +39,7 @@ class AlienWindow(arcade.Window):
         self.background = arcade.load_texture("images/space2.jpg")
         self.base_list = arcade.SpriteList()
         self.yellowstar_list = arcade.SpriteList()
+        self.blackstar_list = arcade.SpriteList()
         #self.alien_sprite.center_x = self.world.alien.x
         #self.alien_sprite.center_y = self.world.alien.y
     
@@ -50,6 +52,8 @@ class AlienWindow(arcade.Window):
             base.draw()
         for yellowstar in self.world.yellowstar_list:
             yellowstar.draw()
+        for blackstar in self.world.blackstar_list:
+            blackstar.draw()
 
     def update(self,delta):
         self.world.update(delta)

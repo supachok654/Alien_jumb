@@ -53,6 +53,16 @@ class YellowStar(arcade.Sprite):
         self.change_y = STAR_MOVEMENT_CONSTANT
     def update(self,delta):
         super().update()
+class BlackStar(arcade.Sprite):
+    def __init__(self,world,x,y):
+        super().__init__('images/star3.png')
+        self.world = world
+        self.center_x = x
+        self.center_y = y
+        self.change_y = STAR_MOVEMENT_CONSTANT
+    def update(self,delta):
+        super().update()
+    
         
 
 class World:
@@ -63,6 +73,7 @@ class World:
         #self.base = Base(self,randint(100,700),randint(200,1000))
         self.base_list = arcade.SpriteList()
         self.yellowstar_list = arcade.SpriteList()
+        self.blackstar_list = arcade.SpriteList()
         for x in range(NUM_BASE):
             self.base_list.append(Base(self, randint(100,700),200*(x+1)))
         self.checkstar = 0
@@ -73,14 +84,23 @@ class World:
         #self.base = Base(self,randint(100,700),randint(200,1000))
         #self.base_list.append(Base(self,randint(100,700),randint(200,1000)))
         self.makestar = randint(0,1000)
+        self.randomstar = randint(1,2)
         for x in range(NUM_YELLOWSTAR):
-            if self.makestar < 20 and self.checkstar == 0:
+            if self.makestar < 20 and self.checkstar == 0 and self.randomstar == 1:
                 self.yellowstar_list.append(YellowStar(self,randint(20,780),1000))
                 self.checkstar = 1
+            elif self.makestar < 20 and self.checkstar == 0 and self.randomstar == 2:
+                self.blackstar_list.append(BlackStar(self,randint(20,780),1000))
+                self.checkstar = 1 
         for yellowstar in self.yellowstar_list:
             yellowstar.update(delta)
             if yellowstar.center_y < 0:
                 yellowstar.kill()
+                self.checkstar = 0
+        for blackstar in self.blackstar_list:
+            blackstar.update(delta)
+            if blackstar.center_y < 0:
+                blackstar.kill()
                 self.checkstar = 0
 
         for base in self.base_list:
