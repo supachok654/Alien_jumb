@@ -3,7 +3,7 @@ from random import randint
 GRAVITY_CONSTANT = 750
 NUM_BASE = 5
 NUM_YELLOWSTAR = 1
-BASE_MOVEMENT_CONSTANT = -7
+BASE_MOVEMENT_CONSTANT = -6
 STAR_MOVEMENT_CONSTANT = -10
 
 class Alien(arcade.Sprite):
@@ -53,9 +53,7 @@ class YellowStar(arcade.Sprite):
         self.change_y = STAR_MOVEMENT_CONSTANT
     def update(self,delta):
         super().update()
-        if self.center_y < 0:
-            self.kill()
-            self.checkstar = 0
+        
 
 class World:
     def __init__(self,width,height):
