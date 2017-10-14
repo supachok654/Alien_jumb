@@ -1,6 +1,6 @@
 import arcade
 import arcade.key
-from models import World,Alien,Base
+from models import World,Alien,Base,YellowStar
 from random import randint
  
 SCREEN_WIDTH = 800
@@ -19,7 +19,8 @@ class AlienWindow(arcade.Window):
     def __init__(self,width,height):
         super().__init__(width, height,"Alien Jump")
         self.background = None
-        self.base_list = None 
+        self.base_list = None
+        self.yellowstar_list = None 
         self.world = World(width,height) 
         #self.alien_sprite = arcade.Spcd rite('images/alien1.png')
         #self.base_sprite = arcade.Sprite('images/base_3.png')
@@ -36,17 +37,19 @@ class AlienWindow(arcade.Window):
     def setup(self):
         self.background = arcade.load_texture("images/space2.jpg")
         self.base_list = arcade.SpriteList()
+        self.yellowstar_list = arcade.SpriteList()
         #self.alien_sprite.center_x = self.world.alien.x
         #self.alien_sprite.center_y = self.world.alien.y
     
     def on_draw(self):
         arcade.start_render()
         arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
-
-        self.world.alien.draw()
-
+        self.world.alien.draw() 
+        
         for base in self.world.base_list:
             base.draw()
+        for yellowstar in self.world.yellowstar_list:
+            yellowstar.draw()
 
     def update(self,delta):
         self.world.update(delta)
@@ -65,8 +68,8 @@ class AlienWindow(arcade.Window):
         for base in self.world.base_list:
             if self.world.alien.center_y >= base.center_y - 10.5 and self.world.alien.center_y <= base.center_y + 50.5 \
             and self.world.alien.center_x <= base.center_x + 65 and self.world.alien.center_x >= base.center_x - 65:
-                #self.delta_y *= -BOUNCINESS #แก้
-                #is_on_base = True
+                    #self.delta_y *= -BOUNCINESS #แก้
+                    #is_on_base = True
                 self.is_on_jump = True
                 self.world.alien.change_y = JUMP_CONSTANT
                 #self.world.alien.change_y = 5
