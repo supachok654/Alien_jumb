@@ -1,6 +1,6 @@
 import arcade
 import arcade.key
-from models import World,Alien,Base,YellowStar,BlackStar,Bullet
+from models import World,Alien,Base,YellowStar,BlackStar,Bullet,Asteroid
 from random import randint
  
 SCREEN_WIDTH = 800
@@ -23,6 +23,7 @@ class AlienWindow(arcade.Window):
         self.yellowstar_list = None 
         self.blackstar_list = None
         self.bullet_list = None
+        self.asteroid_list = None
         self.world = World(width,height) 
         #self.alien_sprite = arcade.Spcd rite('images/alien1.png')
         #self.base_sprite = arcade.Sprite('images/base_3.png')
@@ -43,6 +44,7 @@ class AlienWindow(arcade.Window):
         self.yellowstar_list = arcade.SpriteList()
         self.blackstar_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
+        self.asteroid_list = arcade.SpriteList()
         #self.alien_sprite.center_x = self.world.alien.x
         #self.alien_sprite.center_y = self.world.alien.y
     
@@ -59,6 +61,8 @@ class AlienWindow(arcade.Window):
             blackstar.draw()
         for bullet in self.world.bullet_list:
             bullet.draw()
+        for asteroid in self.world.asteroid_list:
+            asteroid.draw()
     def update(self,delta):
         self.world.update(delta)
         #self.alien_sprite.set_position(self.world.alien.x,self.world.alien.y)

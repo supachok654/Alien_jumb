@@ -6,6 +6,8 @@ NUM_STAR = 1
 BASE_MOVEMENT_CONSTANT = -6
 STAR_MOVEMENT_CONSTANT = -10
 BULLET_MOVEMENT_CONSTANT = 10
+ASTEROID_MOVEMENT_CONSTANT = -3
+NUM_ASTEROID = 1
 class Alien(arcade.Sprite):
     def __init__(self,world,x,y):
         super().__init__('images/alien1.png')
@@ -73,6 +75,15 @@ class Bullet(arcade.Sprite):
         self.change_y = BULLET_MOVEMENT_CONSTANT
     def update(self,delta):
         super().update()
+class Asteroid(arcade.Sprite):
+    def __init__(self,world,x,y):
+        super().__init__('images/asteroid.png')
+        self.world = world
+        self.center_x = x
+        self.center_y = y
+        self.change_y = ASTEROID_MOVEMENT_CONSTANT
+    def update(self,delta):
+        super().update()
 
 class World:
     def __init__(self,width,height):
@@ -84,10 +95,11 @@ class World:
         self.yellowstar_list = arcade.SpriteList()
         self.blackstar_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
+        self.asteroid_list = arcade.SpriteList()
         for x in range(NUM_BASE):
             self.base_list.append(Base(self, randint(100,700),200*(x+1)))
         self.checkstar = 0
-        
+        self.checkasteroid = 0
     def update(self,delta):
         self.alien.update(delta)
         #self.base.update(delta)
@@ -95,6 +107,11 @@ class World:
         #self.base_list.append(Base(self,randint(100,700),randint(200,1000)))
         self.makestar = randint(0,1000)
         self.randomstar = randint(1,2)
+        self.makeasteroid = randint (0,1750)
+        for x in range(NUM_ASTEROID):
+            if self.makeasteroid < 20 and self.checkasteroid < 3:
+                self.asteroid_list.append(Asteroid(self,randint(50,750),1000))
+                self.checkasteroid += 1
         for x in range(NUM_STAR):
             if self.makestar < 20 and self.checkstar == 0 and self.randomstar == 1:
                 self.yellowstar_list.append(YellowStar(self,randint(20,780),1000))
@@ -112,6 +129,11 @@ class World:
             if blackstar.center_y < 0:
                 blackstar.kill()
                 self.checkstar = 0
+        for asteroid in self.asteroid_list:
+            asteroid.update(delta)
+            if asteroid.center_y <0:
+                asteroid.kill()
+                self.checkasteroid -= 1
 
         for base in self.base_list:
             base.update(delta)
