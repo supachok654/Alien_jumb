@@ -5,7 +5,7 @@ NUM_BASE = 5
 NUM_STAR = 1
 BASE_MOVEMENT_CONSTANT = -6
 STAR_MOVEMENT_CONSTANT = -10
-BULLET_MOVEMENT_CONSTANT = 5
+BULLET_MOVEMENT_CONSTANT = 10
 class Alien(arcade.Sprite):
     def __init__(self,world,x,y):
         super().__init__('images/alien1.png')
@@ -73,7 +73,6 @@ class Bullet(arcade.Sprite):
         self.change_y = BULLET_MOVEMENT_CONSTANT
     def update(self,delta):
         super().update()
-        self.center_y += self.change_y
 
 class World:
     def __init__(self,width,height):
@@ -116,8 +115,5 @@ class World:
 
         for base in self.base_list:
             base.update(delta)
-        for bullet in self.bullet_list:
-            bullet.update(delta)
-            if(bullet.center_y > height):
-                bullet.kill()
+
 

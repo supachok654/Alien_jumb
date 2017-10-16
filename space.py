@@ -33,7 +33,7 @@ class AlienWindow(arcade.Window):
         self.delta_y = alien.chnage_y
         self.is_on_jump = False
         self.checkyellowstar = True
-
+        
         #self.alien.set_position(400, 125) #alien position
         
 
@@ -107,7 +107,10 @@ class AlienWindow(arcade.Window):
         else:
             self.delta_y = GRAVITY_CONSTANT
         '''
-        
+        for bullet in self.bullet_list:
+            bullet.update(delta)
+            if(bullet.center_y > SCREEN_HEIGHT):
+                bullet.kill()
 
     def on_key_press(self,key,modifiers):
         if(key == arcade.key.LEFT and self.checkyellowstar == True):
