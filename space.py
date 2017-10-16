@@ -1,6 +1,6 @@
 import arcade
 import arcade.key
-from models import World,Alien,Base,YellowStar,BlackStar
+from models import World,Alien,Base,YellowStar,BlackStar,Bullet
 from random import randint
  
 SCREEN_WIDTH = 800
@@ -22,6 +22,7 @@ class AlienWindow(arcade.Window):
         self.base_list = None
         self.yellowstar_list = None 
         self.blackstar_list = None
+        self.bullet_list = None
         self.world = World(width,height) 
         #self.alien_sprite = arcade.Spcd rite('images/alien1.png')
         #self.base_sprite = arcade.Sprite('images/base_3.png')
@@ -41,6 +42,7 @@ class AlienWindow(arcade.Window):
         self.base_list = arcade.SpriteList()
         self.yellowstar_list = arcade.SpriteList()
         self.blackstar_list = arcade.SpriteList()
+        self.bullet_list = arcade.SpriteList()
         #self.alien_sprite.center_x = self.world.alien.x
         #self.alien_sprite.center_y = self.world.alien.y
     
@@ -48,14 +50,15 @@ class AlienWindow(arcade.Window):
         arcade.start_render()
         arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
         self.world.alien.draw() 
-        
+        self.bullet_list.draw()
         for base in self.world.base_list:
             base.draw()
         for yellowstar in self.world.yellowstar_list:
             yellowstar.draw()
         for blackstar in self.world.blackstar_list:
             blackstar.draw()
-
+        for bullet in self.world.bullet_list:
+            bullet.draw()
     def update(self,delta):
         self.world.update(delta)
         #self.alien_sprite.set_position(self.world.alien.x,self.world.alien.y)
@@ -89,7 +92,6 @@ class AlienWindow(arcade.Window):
                 self.checkyellowstar = False
                 blackstar.kill()
                 self.world.checkstar = 0
-        
         if self.is_on_jump:
             self.world.alien.change_y -= CHANGE_Y_CONSTANT
             if self.world.alien.change_y < -50: 
@@ -116,7 +118,8 @@ class AlienWindow(arcade.Window):
             self.delta_x = MOVEMENT_CONSTANT
         elif(key == arcade.key.RIGHT and self.checkyellowstar == False):
             self.delta_x = -MOVEMENT_CONSTANT
-        
+        if (key == arcade.key.SPACE):
+            self.bullet_list.append(Bullet(self,self.world.alien.center_x,self.world.alien.center_y))
     def on_key_release(self,key,modifiers):
         if(key == arcade.key.LEFT or key == arcade.key.RIGHT):
            self.delta_x = 0

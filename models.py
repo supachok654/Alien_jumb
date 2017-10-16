@@ -2,10 +2,10 @@ import arcade
 from random import randint
 GRAVITY_CONSTANT = 750
 NUM_BASE = 5
-NUM_YELLOWSTAR = 1
+NUM_STAR = 1
 BASE_MOVEMENT_CONSTANT = -6
 STAR_MOVEMENT_CONSTANT = -10
-
+BULLET_MOVEMENT_CONSTANT = 5
 class Alien(arcade.Sprite):
     def __init__(self,world,x,y):
         super().__init__('images/alien1.png')
@@ -53,6 +53,7 @@ class YellowStar(arcade.Sprite):
         self.change_y = STAR_MOVEMENT_CONSTANT
     def update(self,delta):
         super().update()
+
 class BlackStar(arcade.Sprite):
     def __init__(self,world,x,y):
         super().__init__('images/star3.png')
@@ -62,8 +63,17 @@ class BlackStar(arcade.Sprite):
         self.change_y = STAR_MOVEMENT_CONSTANT
     def update(self,delta):
         super().update()
-    
-        
+
+class Bullet(arcade.Sprite):
+    def __init__(self,world,x,y):
+        super().__init__('images/bullet.png')
+        self.world = world
+        self.center_x = x
+        self.center_y = y
+        self.change_y = BULLET_MOVEMENT_CONSTANT
+    def update(self,delta):
+        super().update()
+        self.center_y += self.change_y
 
 class World:
     def __init__(self,width,height):
@@ -74,6 +84,7 @@ class World:
         self.base_list = arcade.SpriteList()
         self.yellowstar_list = arcade.SpriteList()
         self.blackstar_list = arcade.SpriteList()
+        self.bullet_list = arcade.SpriteList()
         for x in range(NUM_BASE):
             self.base_list.append(Base(self, randint(100,700),200*(x+1)))
         self.checkstar = 0
@@ -85,7 +96,7 @@ class World:
         #self.base_list.append(Base(self,randint(100,700),randint(200,1000)))
         self.makestar = randint(0,1000)
         self.randomstar = randint(1,2)
-        for x in range(NUM_YELLOWSTAR):
+        for x in range(NUM_STAR):
             if self.makestar < 20 and self.checkstar == 0 and self.randomstar == 1:
                 self.yellowstar_list.append(YellowStar(self,randint(20,780),1000))
                 self.checkstar = 1
@@ -105,4 +116,8 @@ class World:
 
         for base in self.base_list:
             base.update(delta)
+        for bullet in self.bullet_list:
+            bullet.update(delta)
+            if(bullet.center_y > height):
+                bullet.kill()
 
