@@ -72,7 +72,7 @@ class AlienWindow(arcade.Window):
         
         for base in self.world.base_list:
             if self.world.alien.center_y >= base.center_y - 10.5 and self.world.alien.center_y <= base.center_y + 50.5 \
-            and self.world.alien.center_x <= base.center_x + 65 and self.world.alien.center_x >= base.center_x - 65:
+            and self.world.alien.center_x <= base.center_x + 65 and self.world.alien.center_x >= base.center_x - 65 and self.world.alien.change_y < 0:
                     #self.delta_y *= -BOUNCINESS #แก้
                     #is_on_base = True
                 self.is_on_jump = True
@@ -92,7 +92,7 @@ class AlienWindow(arcade.Window):
         
         if self.is_on_jump:
             self.world.alien.change_y -= CHANGE_Y_CONSTANT
-            if self.world.alien.change_y < -200: 
+            if self.world.alien.change_y < -50: 
                 self.is_on_jump = False
         else:
             self.world.alien.change_y = FALL_CONSTANT
