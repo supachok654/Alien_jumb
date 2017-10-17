@@ -63,6 +63,7 @@ class AlienWindow(arcade.Window):
             bullet.draw()
         for asteroid in self.world.asteroid_list:
             asteroid.draw()
+
     def update(self,delta):
         self.world.update(delta)
         #self.alien_sprite.set_position(self.world.alien.x,self.world.alien.y)
@@ -96,6 +97,15 @@ class AlienWindow(arcade.Window):
                 self.checkyellowstar = False
                 blackstar.kill()
                 self.world.checkstar = 0
+            
+        for bullet in self.bullet_list:
+            asteroids = arcade.check_for_collision_with_list(bullet, self.world.asteroid_list)
+            if len(asteroids)>0:
+                bullet.kill()
+                for asteroid in asteroids:
+                    asteroid.kill()
+                    self.world.checkasteroid -= 1
+            
         if self.is_on_jump:
             self.world.alien.change_y -= CHANGE_Y_CONSTANT
             if self.world.alien.change_y < -50: 
@@ -111,6 +121,8 @@ class AlienWindow(arcade.Window):
         else:
             self.delta_y = GRAVITY_CONSTANT
         '''
+       
+
         for bullet in self.bullet_list:
             bullet.update(delta)
             if(bullet.center_y > SCREEN_HEIGHT):

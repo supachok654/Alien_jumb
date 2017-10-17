@@ -3,7 +3,7 @@ from random import randint
 GRAVITY_CONSTANT = 750
 NUM_BASE = 5
 NUM_STAR = 1
-BASE_MOVEMENT_CONSTANT = -6
+BASE_MOVEMENT_CONSTANT = -4
 STAR_MOVEMENT_CONSTANT = -10
 BULLET_MOVEMENT_CONSTANT = 10
 ASTEROID_MOVEMENT_CONSTANT = -3
@@ -137,5 +137,6 @@ class World:
 
         for base in self.base_list:
             base.update(delta)
-
-
+        
+        
+        
