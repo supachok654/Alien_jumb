@@ -23,8 +23,6 @@ class Alien(arcade.Sprite):
             self.center_x = 0
         if self.center_x < 0:
             self.center_x = 800
-        if self.center_y < 0:
-            self.center_y = self.world.height
 
 class Base(arcade.Sprite):
     def __init__(self,world,x,y):

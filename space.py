@@ -8,7 +8,7 @@ SCREEN_HEIGHT = 1000
 #GRAVITY_CONSTANT = 750 #เดี๋ยวมาแก้ ความโน้มถ่วงให้เพิ่มตามเวลาที่เปลี่ยนไป 
                        #โดยสร้างตัวแปรเวลามาเก็บ
                        #แล้วมาคูนกับ gravity
-MOVEMENT_CONSTANT = 7
+MOVEMENT_CONSTANT = 12
 #BASE_CONSTANT_Y = 500
 #BASE_CONSTANT_X = 500
 #BOUNCINESS = 5
@@ -34,6 +34,8 @@ class AlienWindow(arcade.Window):
         self.delta_y = alien.chnage_y
         self.is_on_jump = False
         self.checkyellowstar = True
+        self.alien_hp = 5
+        self.checkalien = True
         
         #self.alien.set_position(400, 125) #alien position
         
@@ -45,13 +47,16 @@ class AlienWindow(arcade.Window):
         self.blackstar_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
         self.asteroid_list = arcade.SpriteList()
+        self.score = 0
         #self.alien_sprite.center_x = self.world.alien.x
         #self.alien_sprite.center_y = self.world.alien.y
     
     def on_draw(self):
         arcade.start_render()
         arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
-        self.world.alien.draw() 
+        if self.checkalien:
+            self.world.alien.draw() 
+    
         self.bullet_list.draw()
         for base in self.world.base_list:
             base.draw()
@@ -63,7 +68,21 @@ class AlienWindow(arcade.Window):
             bullet.draw()
         for asteroid in self.world.asteroid_list:
             asteroid.draw()
-
+        output = "Score: {}".format(self.score)
+        arcade.draw_text(output,640,950,arcade.color.WHITE,20)
+        output = "HP: {}".format(self.alien_hp)
+        arcade.draw_text(output,640,975,arcade.color.WHITE,20)
+        output = "Status: "
+        arcade.draw_text(output,640,925,arcade.color.WHITE,20)
+        if self.checkyellowstar:
+            output = "Yellow"
+            arcade.draw_text(output,720,925,arcade.color.YELLOW,20)
+        else:
+            output = "Black"
+            arcade.draw_text(output,720,925,arcade.color.BLACK,20)
+        if self.alien_hp <= 0 or self.world.alien.center_y < 0:
+            self.draw_game_over()
+            self.checkalien = False
     def update(self,delta):
         self.world.update(delta)
         #self.alien_sprite.set_position(self.world.alien.x,self.world.alien.y)
@@ -84,6 +103,7 @@ class AlienWindow(arcade.Window):
                     #self.delta_y *= -BOUNCINESS #แก้
                     #is_on_base = True
                 self.is_on_jump = True
+                self.score += 5
                 self.world.alien.change_y = JUMP_CONSTANT
                 #self.world.alien.change_y = 5
                 break
@@ -92,27 +112,35 @@ class AlienWindow(arcade.Window):
                 self.checkyellowstar = True
                 yellowstar.kill()
                 self.world.checkstar = 0
+                self.score += 50
         for blackstar in self.world.blackstar_list:
             if arcade.check_for_collision(self.world.alien,blackstar):
                 self.checkyellowstar = False
                 blackstar.kill()
+                self.score += 100
                 self.world.checkstar = 0
-            
+
         for bullet in self.bullet_list:
             asteroids = arcade.check_for_collision_with_list(bullet, self.world.asteroid_list)
             if len(asteroids)>0:
                 bullet.kill()
                 for asteroid in asteroids:
                     asteroid.kill()
+                    self.score += 25
                     self.world.checkasteroid -= 1
-            
+        for enemy in self.world.asteroid_list:
+            if arcade.check_for_collision(self.world.alien,enemy):
+                if self.alien_hp > 0:
+                    self.alien_hp -= 1
+                enemy.kill()
+                self.world.checkasteroid -= 1
+                   
         if self.is_on_jump:
             self.world.alien.change_y -= CHANGE_Y_CONSTANT
             if self.world.alien.change_y < -50: 
                 self.is_on_jump = False
         else:
             self.world.alien.change_y = FALL_CONSTANT
-
         '''
         if(self.alien_sprite.center_y >= self.world.base.y-10.5 and self.alien_sprite.center_y <= self.world.base.y+50.5  and self.alien_sprite.center_x <= self.world.base.x+65 and self.alien_sprite.center_x >= self.world.base.x-65):
                 #self.delta_y *= -BOUNCINESS #แก้
@@ -127,6 +155,12 @@ class AlienWindow(arcade.Window):
             bullet.update(delta)
             if(bullet.center_y > SCREEN_HEIGHT):
                 bullet.kill()
+    def draw_game_over(self):
+        output = "Game Over"
+        arcade.draw_text(output,250,650,arcade.color.WHITE,54)
+
+        output = "Your Scores: {}".format(self.score)
+        arcade.draw_text(output,300,600,arcade.color.WHITE,25)
 
     def on_key_press(self,key,modifiers):
         if(key == arcade.key.LEFT and self.checkyellowstar == True):
