@@ -36,6 +36,8 @@ class AlienWindow(arcade.Window):
         self.checkyellowstar = True
         self.alien_hp = 5
         self.checkalien = True
+        self.game_over = False
+
         
         #self.alien.set_position(400, 125) #alien position
         
@@ -54,9 +56,12 @@ class AlienWindow(arcade.Window):
     def on_draw(self):
         arcade.start_render()
         arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
+        alien = Alien(self.world,SCREEN_WIDTH,SCREEN_HEIGHT)
+        '''
         if self.checkalien:
             self.world.alien.draw() 
-    
+        '''
+        self.world.alien.draw()
         self.bullet_list.draw()
         for base in self.world.base_list:
             base.draw()
@@ -80,11 +85,23 @@ class AlienWindow(arcade.Window):
         else:
             output = "Black"
             arcade.draw_text(output,720,925,arcade.color.BLACK,20)
+
+        if self.game_over:
+            self.draw_game_over()
+            return None
+        
+        '''
         if self.alien_hp <= 0 or self.world.alien.center_y < 0:
             self.draw_game_over()
-            self.checkalien = False
+            #self.checkalien = False
+        '''
     def update(self,delta):
         self.world.update(delta)
+
+        if self.game_over:
+            self.draw_game_over()
+            return None
+        
         #self.alien_sprite.set_position(self.world.alien.x,self.world.alien.y)
         #self.base_sprite.set_position(self.world.base.x,self.world.base.y)  
         #self.world.alien.y -= self.delta_y*delta
@@ -155,6 +172,10 @@ class AlienWindow(arcade.Window):
             bullet.update(delta)
             if(bullet.center_y > SCREEN_HEIGHT):
                 bullet.kill()
+
+        if self.alien_hp <= 0 or self.world.alien.center_y < 0:
+            self.game_over = True
+        
     def draw_game_over(self):
         output = "Game Over"
         arcade.draw_text(output,250,650,arcade.color.WHITE,54)
