@@ -56,12 +56,16 @@ class AlienWindow(arcade.Window):
     def on_draw(self):
         arcade.start_render()
         arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
-        alien = Alien(self.world,SCREEN_WIDTH,SCREEN_HEIGHT)
         '''
         if self.checkalien:
             self.world.alien.draw() 
         '''
-        self.world.alien.draw()
+        #self.world.alien.draw()
+        
+        for alien in self.world.alien_list:
+            alien.draw()
+        
+
         self.bullet_list.draw()
         for base in self.world.base_list:
             base.draw()
@@ -86,21 +90,14 @@ class AlienWindow(arcade.Window):
             output = "Black"
             arcade.draw_text(output,720,925,arcade.color.BLACK,20)
 
-        if self.game_over:
-            self.draw_game_over()
-            return None
         
-        '''
         if self.alien_hp <= 0 or self.world.alien.center_y < 0:
             self.draw_game_over()
-            #self.checkalien = False
-        '''
+            self.world.alien.kill()
+            self.checkalien = False
     def update(self,delta):
         self.world.update(delta)
 
-        if self.game_over:
-            self.draw_game_over()
-            return None
         
         #self.alien_sprite.set_position(self.world.alien.x,self.world.alien.y)
         #self.base_sprite.set_position(self.world.base.x,self.world.base.y)  
@@ -120,7 +117,8 @@ class AlienWindow(arcade.Window):
                     #self.delta_y *= -BOUNCINESS #แก้
                     #is_on_base = True
                 self.is_on_jump = True
-                self.score += 5
+                if self.checkalien:
+                    self.score += 5
                 self.world.alien.change_y = JUMP_CONSTANT
                 #self.world.alien.change_y = 5
                 break
@@ -129,12 +127,14 @@ class AlienWindow(arcade.Window):
                 self.checkyellowstar = True
                 yellowstar.kill()
                 self.world.checkstar = 0
-                self.score += 50
+                if self.checkalien:
+                    self.score += 50
         for blackstar in self.world.blackstar_list:
             if arcade.check_for_collision(self.world.alien,blackstar):
                 self.checkyellowstar = False
                 blackstar.kill()
-                self.score += 100
+                if self.checkalien:
+                    self.score += 100
                 self.world.checkstar = 0
 
         for bullet in self.bullet_list:
@@ -143,7 +143,8 @@ class AlienWindow(arcade.Window):
                 bullet.kill()
                 for asteroid in asteroids:
                     asteroid.kill()
-                    self.score += 25
+                    if self.checkalien:
+                        self.score += 25
                     self.world.checkasteroid -= 1
         for enemy in self.world.asteroid_list:
             if arcade.check_for_collision(self.world.alien,enemy):
@@ -173,8 +174,6 @@ class AlienWindow(arcade.Window):
             if(bullet.center_y > SCREEN_HEIGHT):
                 bullet.kill()
 
-        if self.alien_hp <= 0 or self.world.alien.center_y < 0:
-            self.game_over = True
         
     def draw_game_over(self):
         output = "Game Over"
@@ -184,18 +183,18 @@ class AlienWindow(arcade.Window):
         arcade.draw_text(output,300,600,arcade.color.WHITE,25)
 
     def on_key_press(self,key,modifiers):
-        if(key == arcade.key.LEFT and self.checkyellowstar == True):
+        if key == arcade.key.LEFT and self.checkyellowstar == True:
             self.delta_x = -MOVEMENT_CONSTANT
-        elif(key == arcade.key.RIGHT and self.checkyellowstar == True):
+        elif key == arcade.key.RIGHT and self.checkyellowstar == True:
             self.delta_x = MOVEMENT_CONSTANT
-        elif(key == arcade.key.LEFT and self.checkyellowstar == False):
+        elif key == arcade.key.LEFT and self.checkyellowstar == False:
             self.delta_x = MOVEMENT_CONSTANT
-        elif(key == arcade.key.RIGHT and self.checkyellowstar == False):
+        elif key == arcade.key.RIGHT and self.checkyellowstar == False:
             self.delta_x = -MOVEMENT_CONSTANT
-        if (key == arcade.key.SPACE):
+        if key == arcade.key.SPACE and self.checkalien:
             self.bullet_list.append(Bullet(self,self.world.alien.center_x,self.world.alien.center_y))
     def on_key_release(self,key,modifiers):
-        if(key == arcade.key.LEFT or key == arcade.key.RIGHT):
+        if key == arcade.key.LEFT or key == arcade.key.RIGHT:
            self.delta_x = 0
        
 def main():

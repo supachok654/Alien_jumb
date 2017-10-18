@@ -88,6 +88,11 @@ class World:
         self.width = width
         self.height = height
         self.alien = Alien(self, 400, 800)
+
+        # list
+        self.alien_list = arcade.SpriteList()
+        self.alien_list.append(self.alien)
+
         #self.base = Base(self,randint(100,700),randint(200,1000))
         self.base_list = arcade.SpriteList()
         self.yellowstar_list = arcade.SpriteList()
