@@ -1,6 +1,6 @@
 import arcade
 import arcade.key
-from models import World,Alien,Base,YellowStar,BlackStar,Bullet,Asteroid
+from models import World,Alien,Base,YellowStar,BlackStar,Bullet,Asteroid,Heart
 from random import randint
  
 SCREEN_WIDTH = 800
@@ -24,6 +24,7 @@ class AlienWindow(arcade.Window):
         self.blackstar_list = None
         self.bullet_list = None
         self.asteroid_list = None
+        self.heart_list = None
         self.world = World(width,height) 
         #self.alien_sprite = arcade.Spcd rite('images/alien1.png')
         #self.base_sprite = arcade.Sprite('images/base_3.png')
@@ -49,6 +50,7 @@ class AlienWindow(arcade.Window):
         self.blackstar_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
         self.asteroid_list = arcade.SpriteList()
+        self.heart_list = arcade.SpriteList()
         self.score = 0
         #self.alien_sprite.center_x = self.world.alien.x
         #self.alien_sprite.center_y = self.world.alien.y
@@ -77,6 +79,8 @@ class AlienWindow(arcade.Window):
             bullet.draw()
         for asteroid in self.world.asteroid_list:
             asteroid.draw()
+        for heart in self.world.heart_list:
+            heart.draw()
         output = "Score: {}".format(self.score)
         arcade.draw_text(output,640,950,arcade.color.WHITE,20)
         output = "HP: {}".format(self.alien_hp)
@@ -118,7 +122,7 @@ class AlienWindow(arcade.Window):
                     #is_on_base = True
                 self.is_on_jump = True
                 if self.checkalien:
-                    self.score += 5
+                    self.score += 10
                 self.world.alien.change_y = JUMP_CONSTANT
                 #self.world.alien.change_y = 5
                 break
@@ -152,6 +156,12 @@ class AlienWindow(arcade.Window):
                     self.alien_hp -= 1
                 enemy.kill()
                 self.world.checkasteroid -= 1
+        for heart in self.world.heart_list:
+            if arcade.check_for_collision(self.world.alien,heart):
+                self.world.checkheart = 0
+                heart.kill()
+                if self.alien_hp < 5:
+                    self.alien_hp += 1
                    
         if self.is_on_jump:
             self.world.alien.change_y -= CHANGE_Y_CONSTANT

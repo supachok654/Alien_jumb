@@ -7,7 +7,9 @@ BASE_MOVEMENT_CONSTANT = -4
 STAR_MOVEMENT_CONSTANT = -10
 BULLET_MOVEMENT_CONSTANT = 30
 ASTEROID_MOVEMENT_CONSTANT = -3
+HEART_MOVEMENT_CONSTANT = -2
 NUM_ASTEROID = 1
+NUM_HEART = 1
 class Alien(arcade.Sprite):
     def __init__(self,world,x,y):
         super().__init__('images/alien1.png')
@@ -82,6 +84,15 @@ class Asteroid(arcade.Sprite):
         self.change_y = ASTEROID_MOVEMENT_CONSTANT
     def update(self,delta):
         super().update()
+class Heart(arcade.Sprite):
+    def __init__(self,world,x,y):
+        super().__init__('images/hud_heartFull.png')
+        self.world = world
+        self.center_x = x
+        self.center_y = y
+        self.change_y = HEART_MOVEMENT_CONSTANT
+    def update(self,delta):
+        super().update()
 
 class World:
     def __init__(self,width,height):
@@ -99,10 +110,12 @@ class World:
         self.blackstar_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
         self.asteroid_list = arcade.SpriteList()
+        self.heart_list =  arcade.SpriteList()
         for x in range(NUM_BASE):
             self.base_list.append(Base(self, randint(100,700),200*(x+1)))
         self.checkstar = 0
         self.checkasteroid = 0
+        self.checkheart = 0
     def update(self,delta):
         self.alien.update(delta)
         #self.base.update(delta)
@@ -111,6 +124,7 @@ class World:
         self.makestar = randint(0,1000)
         self.randomstar = randint(1,2)
         self.makeasteroid = randint (0,1750)
+        self.makeheart = randint(0,7500)
         for x in range(NUM_ASTEROID):
             if self.makeasteroid < 20 and self.checkasteroid < 3:
                 self.asteroid_list.append(Asteroid(self,randint(50,750),1000))
@@ -122,6 +136,10 @@ class World:
             elif self.makestar < 20 and self.checkstar == 0 and self.randomstar == 2:
                 self.blackstar_list.append(BlackStar(self,randint(20,780),1000))
                 self.checkstar = 1 
+        for x in range(NUM_HEART):
+            if self.makeheart < 20 and self.checkheart == 0:
+                self.heart_list.append(Heart(self,randint(20,750),1000))
+                self.checkheart = 1
         for yellowstar in self.yellowstar_list:
             yellowstar.update(delta)
             if yellowstar.center_y < 0:
@@ -134,12 +152,16 @@ class World:
                 self.checkstar = 0
         for asteroid in self.asteroid_list:
             asteroid.update(delta)
-            if asteroid.center_y <0:
+            if asteroid.center_y < 0:
                 asteroid.kill()
                 self.checkasteroid -= 1
 
         for base in self.base_list:
             base.update(delta)
-        
+        for heart in self.heart_list: 
+            heart.update(delta)
+            if heart.center_y < 0:
+                heart.kill()
+                self.checkheart = 0 
         
         
