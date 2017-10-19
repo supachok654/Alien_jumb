@@ -122,7 +122,7 @@ class World:
         #self.base = Base(self,randint(100,700),randint(200,1000))
         #self.base_list.append(Base(self,randint(100,700),randint(200,1000)))
         self.makestar = randint(0,1000)
-        self.randomstar = randint(1,2)
+        self.randomstar = randint(1,3)
         self.makeasteroid = randint (0,1750)
         self.makeheart = randint(0,7500)
         for x in range(NUM_ASTEROID):
@@ -130,10 +130,10 @@ class World:
                 self.asteroid_list.append(Asteroid(self,randint(50,750),1000))
                 self.checkasteroid += 1
         for x in range(NUM_STAR):
-            if self.makestar < 20 and self.checkstar == 0 and self.randomstar == 1:
+            if self.makestar < 20 and self.checkstar == 0 and self.randomstar < 3:
                 self.yellowstar_list.append(YellowStar(self,randint(20,780),1000))
                 self.checkstar = 1
-            elif self.makestar < 20 and self.checkstar == 0 and self.randomstar == 2:
+            elif self.makestar < 20 and self.checkstar == 0 and self.randomstar == 3:
                 self.blackstar_list.append(BlackStar(self,randint(20,780),1000))
                 self.checkstar = 1 
         for x in range(NUM_HEART):
