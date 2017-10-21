@@ -100,11 +100,9 @@ class World:
         self.height = height
         self.alien = Alien(self, 400, 800)
 
-        # list
         self.alien_list = arcade.SpriteList()
         self.alien_list.append(self.alien)
 
-        #self.base = Base(self,randint(100,700),randint(200,1000))
         self.base_list = arcade.SpriteList()
         self.yellowstar_list = arcade.SpriteList()
         self.blackstar_list = arcade.SpriteList()
@@ -118,9 +116,6 @@ class World:
         self.checkheart = 0
     def update(self,delta):
         self.alien.update(delta)
-        #self.base.update(delta)
-        #self.base = Base(self,randint(100,700),randint(200,1000))
-        #self.base_list.append(Base(self,randint(100,700),randint(200,1000)))
         self.makestar = randint(0,1000)
         self.randomstar = randint(1,3)
         self.makeasteroid = randint (0,1750)
